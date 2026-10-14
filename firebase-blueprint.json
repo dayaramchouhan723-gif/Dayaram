@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "ResumeRecord": {
+      "title": "ResumeRecord",
+      "description": "Scanned resume ATS analysis and details",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "candidateName": { "type": "string" },
+        "targetJobTitle": { "type": "string" },
+        "overallScore": { "type": "integer" },
+        "impactScore": { "type": "integer" },
+        "skillsScore": { "type": "integer" },
+        "formatScore": { "type": "integer" },
+        "verbScore": { "type": "integer" },
+        "executiveSummary": { "type": "string" },
+        "vocalScript": { "type": "string" },
+        "generatedCoverLetter": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "candidateName", "overallScore", "createdAt", "updatedAt"]
+    },
+    "UserPreferences": {
+      "title": "UserPreferences",
+      "description": "User preferences and system customizations",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "activeAgentId": { "type": "string" },
+        "auraSignature": { "type": "string" },
+        "launcherCore": { "type": "string" },
+        "hapticsEnabled": { "type": "boolean" },
+        "orbType": { "type": "string" },
+        "orbSize": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "activeAgentId", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/resumes/{resumeId}": {
+      "schema": "ResumeRecord",
+      "description": "Collection of ATS resume evaluations scoped to user"
+    },
+    "/users/{userId}/preferences/{prefId}": {
+      "schema": "UserPreferences",
+      "description": "User system settings and active agent preferences"
+    }
+  }
+}

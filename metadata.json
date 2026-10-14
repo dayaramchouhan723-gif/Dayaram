@@ -1,0 +1,6 @@
+{
+  "name": "CHOUHAN EMPIRE",
+  "description": "CHOUHAN EMPIRE 2.2.12 Multi-Agent AI system with 11 specialized agents, ElevenLabs/Gemini/Groq Connectors, Voice Clone Studio, RESUMAX ATS Scanner, Aura Control, and neon claymorphic UI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

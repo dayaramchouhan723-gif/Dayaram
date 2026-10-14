@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidResume(data) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.candidateName is string &&
+             data.candidateName.size() > 0 &&
+             data.candidateName.size() <= 100 &&
+             data.overallScore is int &&
+             data.overallScore >= 0 &&
+             data.overallScore <= 100 &&
+             data.createdAt is timestamp &&
+             data.updatedAt is timestamp;
+    }
+
+    function isValidPreferences(data) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.activeAgentId is string &&
+             data.activeAgentId.size() > 0 &&
+             data.activeAgentId.size() <= 50 &&
+             data.createdAt is timestamp &&
+             data.updatedAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /resumes/{resumeId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidResume(request.resource.data);
+        allow update: if isOwner(userId) && isValidResume(request.resource.data) &&
+                         request.resource.data.createdAt == resource.data.createdAt &&
+                         request.resource.data.userId == resource.data.userId;
+        allow delete: if isOwner(userId);
+      }
+
+      match /preferences/{prefId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidPreferences(request.resource.data);
+        allow update: if isOwner(userId) && isValidPreferences(request.resource.data) &&
+                         request.resource.data.createdAt == resource.data.createdAt &&
+                         request.resource.data.userId == resource.data.userId;
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
